@@ -48,22 +48,6 @@ const Register = () => {
       navigate("/login")
     }
     
-    // Check if the password and confirmPassword match
-    /*if (formData.password !== formData.confirmPassword) {
-      console.error('Password and Repeat Password do not match');
-      // You can display an error message to the user here
-      return;
-    }
-
-    try {
-      const data = await registerUser(formData);
-      console.log('Response from server:', data);
-      if (data.message === 'User registered successfully') {
-        navigate('/login');
-      }
-    } catch (error) {
-      console.error('Error:', error);
-    }*/
   };
   return (
     <section >

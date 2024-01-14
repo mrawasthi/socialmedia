@@ -6,6 +6,7 @@ import Leaderboard from "../pages/Leaderboard";
 import Profile from "../pages/Profile";
 import Friends from "../pages/Friends";
 import Contactus from "../pages/Contactus";
+import Chat from "../pages/Chat"
 
 export const router = createBrowserRouter([
   {
@@ -36,4 +37,8 @@ export const router = createBrowserRouter([
     path: "/contactus",
     element: <Contactus />,
   },
+  {
+    path: "/chat",
+    element: <Chat />
+  }
 ]);

@@ -1,6 +1,6 @@
 // friends.jsx
 import React, { useState } from 'react';
-import '../Scss/Friends.scss';
+import '../Scss/Chat.scss';
 import search1 from "../image/search1.png";
 import { useAuth } from '../store/Auth';
 
@@ -181,20 +181,7 @@ const Friends = () => {
       <div className="upper-container-friend">
         <div className="left-friend">
           <div className="form-group">
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Search ... "
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-            <button
-              type="button"
-              className="btn btn-dark search-button"
-              onClick={handleSearch}
-            >
-              <img src={search1} alt="Search" className="medal" />
-            </button>
+            <div className="timer-area-text2">FRIENDS</div>
           </div>
           {!searchToggle &&
             <div className="friends-area-container">
@@ -213,23 +200,9 @@ const Friends = () => {
               </div>
             </div>
           }
-
-          {searchToggle && (
-            <div className="showfriend">
-              {filteredFriends.map((friend, index) => (
-                <div key={index} className="search-box">
-                  <div className="search-out">
-                    <div className="search-item">{friend.name}</div>
-                    <div className="search-item">{friend.email}</div>
-                  </div>
-                  <button type="button" class="btn btn-success request-button" onClick={() => sendRequest(friend._id)}>Request</button>
-                </div>
-              ))}
-            </div>
-          )}
         </div>
         <div className="right-friend">
-          <div className="heading">PENDING REQUESTS</div>
+          <div className="heading">PROFILE FRIEND</div>
           <div className="friends-area-container right-friend-request">
             <div className="friends-area">
               {currPending.map((friend, index) => (
