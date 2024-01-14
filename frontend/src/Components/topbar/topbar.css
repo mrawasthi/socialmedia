@@ -1,0 +1,69 @@
+/* src/components/TopBar.css */
+.navbar {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand {
+  font-size: 1.5rem;
+}
+
+.navbar-nav .nav-link {
+  margin-right: 15px;
+}
+
+.nav-item.dropdown {
+  position: relative;
+}
+
+.profile-icon-container {
+  position: relative;
+}
+
+.profile-icon {
+  font-size: 1.5rem;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #007bff; /* Blue color */
+  color: #fff; /* White text color */
+  width: 35px;
+  height: 35px;
+}
+
+.profile-icon:hover {
+  background-color: #0056b3; /* Darker blue color on hover */
+}
+
+/* Profile Popup */
+.profile-popup {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 200px;
+  background-color: #fff;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+.profile-popup-content {
+  padding: 10px;
+}
+
+.profile-popup-item {
+  display: block;
+  padding: 8px 10px;
+  text-decoration: none;
+  color: #333;
+}
+
+.profile-popup-item:hover {
+  background-color: #f8f9fa; /* Light background color on hover */
+}
+.app{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 70px;
+}

@@ -1,0 +1,26 @@
+.timer-area-inner{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: fit-content;
+    width: fit-content;
+}
+.timer-area{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.timer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: black;
+    height: 100px;
+    width: 100px;
+    margin: 5px;
+    color: white;
+    font-size: 50px;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+}
