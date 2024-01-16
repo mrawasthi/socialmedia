@@ -3,6 +3,7 @@ const app=express()
 const jwt= require("jsonwebtoken")
 const router = express.Router()
 const User=require("../model/userSchema")
+const Message=require("../model/message")
 const Post=require('../model/postModel')
 const bcrypt=require('bcryptjs')
 const cors = require('cors');
@@ -248,4 +249,41 @@ router.get('/mypendingrequest',authenticate,async(req,res)=>{
       res.status(400).json({msg:"error occured"})
    }
 })
+router.post('/sendmessage',authenticate,async(req,res)=>{
+   const id=req.userID
+   try{
+      const friend=req.body.ide
+      const message=req.body.content
+      //console.log({id,friend,message})
+      const msg = new Message({ message, fromUser: req.userID, toUser: friend });
+      await msg.save()
+      res.status(200).json({msg:"all ok"})
+   }catch(err){
+      res.status(400).json({msg:"error occurred"})
+      console.log(`${err}`)
+   }
+})
+router.post('/getmessage', authenticate, async (req, res) => {
+   try {
+       const fromUser = req.userID;  
+       const toUser = req.body.ide; 
+       const messages = await Message.find({
+         $or: [
+            { $and: [{ fromUser }, { toUser }] },
+            { $and: [{ fromUser: toUser }, { toUser: fromUser }] },
+        ],
+       }).sort({ updatedAt: 1 }); 
+       
+       const projectedMessage=messages.map(msg=>{
+         return{
+            fromUser: msg.fromUser.equals(fromUser),  
+           message: msg.message,
+         }
+       })
+       res.status(200).json({ msg:projectedMessage });
+   } catch (error) {
+       console.error(error);
+       res.status(500).json({ msg: 'Internal Server Error' });
+   }
+});
 module.exports=router

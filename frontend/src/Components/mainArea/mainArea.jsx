@@ -2,6 +2,7 @@ import React from 'react';
 import './mainArea.css';
 import LeftPane from './LeftPane.jsx';
 
+
 export default function MainArea() {
   return (
     <div className="uppercontainer">

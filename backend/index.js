@@ -7,11 +7,11 @@ const cookieparser=require("cookie-parser")
 const app=express()
 const PORT=3000;
 
+const socket=require("socket.io")
+
+
 //import userSchema
 const User=require("./model/userSchema")
-
-
-
 app.use(express.json())
 app.use(cors())
 const cookieParser = require("cookie-parser");
@@ -60,6 +60,31 @@ mongoose.connect("mongodb+srv://ayush1234567890:ILIKEMANGO@cluster0.gone4jf.mong
 app.get("/",(req,res)=>{
     res.status(200).send("hello world");
 })
-app.listen(PORT,()=>{
+const server=app.listen(PORT,()=>{
     console.log(`app is running on ${PORT}`)
+})
+const io = socket(server, {
+    cors: {
+      origin: "*",
+      credentials: true,
+    },
+  });
+  
+  global.onlineUsers = new Map();
+  io.on("connection", (socket) => {
+    global.chatSocket = socket;
+    console.log("ok")
+    socket.on("add-user", (userId) => {
+        console.log("hello guys")
+        onlineUsers.set(userId, socket.id);
+        console.log(onlineUsers)
+    });
+
+    socket.on("send-msg",(data)=>{
+        const sendUserSocket=onlineUsers.get(data.to)
+        if(sendUserSocket){
+            console.log(data.msg)
+            socket.to(sendUserSocket).emit("msg-receive",data.msg)
+        }
+    })
 })
