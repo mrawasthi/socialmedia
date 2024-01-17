@@ -18,16 +18,6 @@ import { IoMdSend } from "react-icons/io";
   const [arrivalmsg,setArrivalmsg]=useState([])
   const scrollRef = useRef();
 
-  // const handleEmojiPickerhideShow = () => {
-  //   setShowEmojiPicker(!showEmojiPicker);
-  // };
-
-  // const handleEmojiClick = (event, emojiObject) => {
-  // let message = msg;
-  // message += emojiObject.emoji;
-  // setMsg(message);
-  // };
-
   const sendChat = (event) => {
     
   if (msg.length > 0) {
@@ -99,6 +89,7 @@ import { IoMdSend } from "react-icons/io";
 
   const chatFriend=async(ide)=>{
     setCurrChat(ide)
+
     try {
       const response = await fetch(`http://localhost:3000/getmessage`, {
         method: "POST",
@@ -119,7 +110,6 @@ import { IoMdSend } from "react-icons/io";
     } catch (error) {
       console.log(`${error}`)
     }
-
   }
   const firstRender = async () => {
     try {
@@ -170,7 +160,7 @@ import { IoMdSend } from "react-icons/io";
             </div>
         </div>
         <div className="right-friend">
-          <div className="heading">PROFILE FRIEND</div>
+          <div className="heading">CHAT</div>
           <div className="friends-area-container right-friend-request" ref={scrollRef}>
               {currChat ? <ChatContainer currFriendChat={currFriendChat} socket={socket}/> : <Welcome />}
           </div>

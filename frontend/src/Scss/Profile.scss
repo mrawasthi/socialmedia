@@ -23,7 +23,7 @@
     grid-row-end: 5;
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
     border-radius: 10px;
-    background: linear-gradient(0deg, rgba(136,136,136,1) 25%, rgba(180,178,176,0.017331932773109293) 100%);
+    background-color: #F5F5F5;
     padding: 0px 10px;
     align-items: end;
     padding: 5px;
@@ -40,7 +40,7 @@
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
     border-radius: 10px;
     padding: 5px;
-    background: linear-gradient(to top, rgba(136,136,136,1) 25%, rgba(180,178,176,0.017331932773109293) 100%);
+    background-color: #F5F5F5;
 }
 .bottomprofile{
     grid-column-start: 2;
@@ -50,7 +50,7 @@
     grid-row-end: 5;
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
     border-radius: 10px;
-    background: linear-gradient(to right, rgba(136,136,136,1) 25%, rgba(180,178,176,0.017331932773109293) 100%);
+    background-color: #F5F5F5;
 }
 .text-center2{
     height: fit-content;

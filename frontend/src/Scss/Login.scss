@@ -44,7 +44,6 @@
   align-items: center;
   justify-content: center;
   height: 100%;
-  background: linear-gradient(to bottom,#3c3e3e, #e9ecec);
 }
 .login-cont{
 display: flex;
@@ -54,6 +53,7 @@ width: 40%;
 background-color: white;
 box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
 border-radius: 10px;
+background-color: #F5F5F5;
 }
 .login-form {
 display: flex;
@@ -63,4 +63,5 @@ flex-direction: column;
 height: 50px;
 margin-left: auto;
 height: fit-content;
+background-color: #F5F5F5;
 }
