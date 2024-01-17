@@ -1,4 +1,3 @@
-
 // friends.jsx
 import React, { useState ,useRef,useEffect} from 'react';
 import '../Scss/Chat.scss';
@@ -17,7 +16,7 @@ import { IoMdSend } from "react-icons/io";
   //const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [currFriendChat,setCurrFriendChat]=useState([])
   const [arrivalmsg,setArrivalmsg]=useState([])
-
+  const scrollRef = useRef();
 
   // const handleEmojiPickerhideShow = () => {
   //   setShowEmojiPicker(!showEmojiPicker);
@@ -30,28 +29,36 @@ import { IoMdSend } from "react-icons/io";
   // };
 
   const sendChat = (event) => {
-  event.preventDefault();
+    
   if (msg.length > 0) {
     handleSendMsg(msg);
     setMsg("");
   }
   };
   
-  const socket=useRef();
+  const  socket=new io("http://localhost:3000")
   const { token,setUser,user } = useAuth()
   console.log(user)
   console.log(token)
   const id = user._id
 
   useEffect(()=>{
-    socket.current=new io("http://localhost:3000", {
-      autoConnect: true,
-      withCredentials: true
-    })
-    console.log(socket.current)
-    socket.current.emit("add-user",id)
+   
+    console.log(socket)
+    socket.emit("add-user",id)
+    if(socket){
+      socket.on("msg-receive",(msg)=>{
+        console.log(msg)
+        setArrivalmsg({fromUser:false,message:msg.message})
+      })
+    }
     console.log("here i am boii")
   },[])
+
+  useEffect(() => {
+    scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [msg]);
+
   const sendMessage=async(e)=>{
     e.preventDefault()
     try {
@@ -69,7 +76,7 @@ import { IoMdSend } from "react-icons/io";
       if (response) {
         const data = await response.json()
         console.log("all done bhai")
-        socket.current.emit("send-msg",{
+        socket.emit("send-msg",{
           to:currChat,
           from:id,
           message:msg
@@ -83,12 +90,7 @@ import { IoMdSend } from "react-icons/io";
     }
   }
   useEffect(()=>{
-    if(socket.current){
-      socket.current.on("msg-receive",(msg)=>{
-        console.log(msg)
-        setArrivalmsg({fromUser:false,message:msg})
-      })
-    }
+    
   },[])
 
   useEffect(()=>{
@@ -129,8 +131,8 @@ import { IoMdSend } from "react-icons/io";
       })
       if (response) {
         const data = await response.json()
-        socket.current=io(`http://localhost:5173`)
-        socket.current.emit("add-user", user._id)
+        //socket=io(http://localhost:5173)
+        socket.emit("add-user", user._id)
         let obj = data.msg
         console.log(obj)
         setCurrFriend(obj)
@@ -169,7 +171,7 @@ import { IoMdSend } from "react-icons/io";
         </div>
         <div className="right-friend">
           <div className="heading">PROFILE FRIEND</div>
-          <div className="friends-area-container right-friend-request">
+          <div className="friends-area-container right-friend-request" ref={scrollRef}>
               {currChat ? <ChatContainer currFriendChat={currFriendChat} socket={socket}/> : <Welcome />}
           </div>
           {currChat && <div className="button-container">
@@ -177,7 +179,7 @@ import { IoMdSend } from "react-icons/io";
                 <div className="form-group">
                 <input
                   type="text"
-                  className="form-control input-message"
+                  className="form-control input-message input-msgg"
                   placeholder="Type Message here"
                   value={msg}
                   onChange={(e) => setMsg(e.target.value)}

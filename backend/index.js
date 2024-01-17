@@ -105,11 +105,14 @@ const io = socket(server, {
         console.log(onlineUsers)
     });
 
-    socket.on("send-msg",(data)=>{
-        const sendUserSocket=onlineUsers.get(data.to)
-        if(sendUserSocket){
-            console.log(data.msg)
-            socket.to(sendUserSocket).emit("msg-receive",data.msg)
-        }
+    socket.on("send-msg", (data) => {
+        console.log(data, 'bbbbb'); 
+        const sendUserSocket = onlineUsers.get(data.to);
+        
+        // Use socket.broadcast.emit to send the message to all clients except the sender
+        
+            //console.log(data, 'bb');
+            socket.broadcast.to(sendUserSocket).emit("msg-receive", data);
+        
     })
 })
