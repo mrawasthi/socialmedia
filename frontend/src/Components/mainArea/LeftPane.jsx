@@ -5,7 +5,7 @@ import {Link} from 'react-router-dom'
 import { useAuth } from '../../store/auth';
 import { useNavigate } from 'react-router-dom';
 
-const leftPane = () => {
+const leftPane = (props) => {
     const navigate = useNavigate();
     const {LogoutUser,user} =useAuth()
     const logout=()=>{
@@ -27,7 +27,7 @@ const leftPane = () => {
                 <button type="button" class="btn btn-outline-dark border-0 btn-lg text-left">
                     <Link to='/friends' style={{ textDecoration: 'none', color: 'inherit' }}>Friends</Link>
                 </button>
-                <button type="button" class="btn btn-outline-dark border-0 btn-lg text-left">
+                <button type="button" class="btn btn-outline-dark border-0 btn-lg text-left" onClick={()=>props.setpopupshow(prev => !prev)}>
                     Post
                 </button>
                 <button type="button" class="btn btn-outline-dark border-0 btn-lg text-left">

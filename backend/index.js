@@ -6,12 +6,12 @@ const multer=require("multer")
 const cookieparser=require("cookie-parser")
 const app=express()
 const PORT=3000;
-
 const socket=require("socket.io")
 
-
+const authenticate=require("./middlewares/authenticate.js")
 //import userSchema
 const User=require("./model/userSchema")
+const Post=require("./model/postModel")
 app.use(express.json())
 app.use(cors())
 const cookieParser = require("cookie-parser");
@@ -48,7 +48,32 @@ app.post("/upload-image/:id",upload.single("image"),async(req,res)=>{
     }
 
 });
+app.post('/sendpost',authenticate,upload.single("image"),async(req,res)=>{
+    try{
+      const fromUser=req.userID
+      const image=req.file.filename
+      const title=req.body.title
+      const currUser=await User.findOne({_id:fromUser})
+      const name=currUser.name
+      const post=new Post({original:fromUser,image,title,originalName:name})
+      await post.save()
+      res.status(200).json({msg:"all ok"})
+    }catch(err){
+     console.log(`${err}`)
+    }
+})
+app.put('/updatepost',authenticate,upload.single("image"),async(req,res)=>{
+    try{
+       const postId=req.body.postId
+       const title=req.body.title
+       const image=req.file.filename
+       const updatePost = await Post.findByIdAndUpdate(postId, { title: title, image: image }, { new: true });
 
+       res.status(200).json({msg:updatePost})
+    }catch(err){
+       console.log(`${err}`)
+    }
+ })
 
 mongoose.connect("mongodb+srv://ayush1234567890:ILIKEMANGO@cluster0.gone4jf.mongodb.net/?retryWrites=true&w=majority",{
     useNewUrlParser:true,

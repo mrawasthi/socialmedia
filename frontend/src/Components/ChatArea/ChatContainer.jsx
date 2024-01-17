@@ -8,7 +8,7 @@ const ChatContainer = (props) => {
     <div className="friends-area-container right-friend-request2">
             <div className="friends-area">
               {messages.map((messages, index) => (
-                <div className={`message-inside ${messages.fromUser ? "sended" : "received" }`}>
+                <div className={`message-inside ${messages.fromUser ? "sended" : "received" }`} key={index}>
                 <div key={index} className={`search-box messages-chat${messages.fromUser ? "2" : "1" } search-friend-out ${messages.fromUser ? "sended" : "received" }`}>
                   <div className="search-out">
                     <div className="search-item">{messages.message}</div>
