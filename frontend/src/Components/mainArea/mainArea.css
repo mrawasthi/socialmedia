@@ -1,14 +1,16 @@
-.uppercontainer{
+.uppercontainer {
     padding: 20px 200px;
 }
-.containerArea{
+
+.containerArea {
     display: grid;
     grid-template-columns: repeat(5, 3fr);
     grid-template-rows: repeat(6, 3fr);
     row-gap: 10px;
     column-gap: 10px;
 }
-.leftPane{
+
+.leftPane {
     display: flex;
     justify-content: center;
     grid-column-start: 1;
@@ -23,7 +25,8 @@
     flex-direction: column;
     background-color: #F5F5F5;
 }
-.stageArea{
+
+.stageArea {
     position: relative;
     grid-column-start: 2;
     grid-column-end: 6;
@@ -33,13 +36,16 @@
     border-radius: 10px;
     background-color: #F5F5F5;
     padding: 10px;
-    overflow-y: auto; /* Add this line to make it scrollable vertically */
+    overflow-y: auto;
+    /* Add this line to make it scrollable vertically */
     max-height: 100%;
 }
-.stageArea::-webkit-scrollbar{
+
+.stageArea::-webkit-scrollbar {
     display: none;
 }
-.rightpane{
+
+.rightpane {
     display: flex;
     justify-content: center;
     grid-column-start: 5;
@@ -55,7 +61,7 @@
     background-color: #F5F5F5;
 }
 
-.main-textarea{
+.main-textarea {
     resize: none;
     border: none;
     outline: none;
@@ -67,6 +73,7 @@
     word-wrap: break-word;
     height: 100%;
 }
+
 .post {
     height: fit-content;
     width: 100%;
@@ -75,12 +82,12 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-   
+
 }
 
 .post-image {
     max-height: 70%;
-    background-color:transparent;
+    background-color: transparent;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -111,33 +118,41 @@
     gap: 0.5rem;
     width: fit-content;
 }
-.caption{
+
+.caption {
     width: 80%;
     margin: 10px 0px 20px 0px;
 }
-.comments{
+
+.comments {
     width: 80%;
 }
-.middle-comment{
+
+.middle-comment {
     font-weight: bold;
 }
-.input-message{
+
+.input-message {
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
     border-radius: 10px;
 }
-.scrollComment{
+
+.scrollComment {
     max-height: 150px;
     overflow-y: auto;
 }
-.scrollComment::-webkit-scrollbar{
+
+.scrollComment::-webkit-scrollbar {
     display: none;
 }
-.user-name{
+
+.user-name {
     width: 80%;
     margin-bottom: 5px;
     font-weight: bold;
 }
-.likecount{
+
+.likecount {
     margin-right: 20px;
     font-size: 20px;
 }

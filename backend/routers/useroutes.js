@@ -3,6 +3,8 @@ const app=express()
 const jwt= require("jsonwebtoken")
 const router = express.Router()
 const User=require("../model/userSchema")
+const Group=require("../model/group")
+const GroupChat=require("../model/groupchat")
 const Message=require("../model/message")
 const Post=require('../model/postModel')
 const bcrypt=require('bcryptjs')
@@ -380,5 +382,140 @@ router.post('/addcomment', authenticate, async (req, res) => {
       res.status(500).json({ msg: "Internal Server Error" });
    }
 });
+
+router.post('/creategroup', authenticate, async (req, res) => {
+   try {
+      const creator_id = req.userID;
+      const  name= req.body.name;
+      const newGroup=new Group({creator_id,name})
+      await newGroup.save()
+      const updateGroup = await Group.findByIdAndUpdate(
+         newGroup._id,
+         { $push: { members:creator_id} },
+         { new: true } 
+      )
+      res.status(201).json({message:"Group created successfully and admin added"})
+   } catch (err) {
+      console.log(`${err}`);
+      res.status(500).json({ msg: "Internal Server Error" });
+   }
+});
+
+router.put('/addmembers', authenticate, async (req, res) => {
+   try {
+      const creator_id = req.userID;
+      const members = req.body.members;
+      const group_id = req.body.groupId;
+
+      const updateGroup = await Group.findByIdAndUpdate(
+         group_id,
+         { $push: { members: { $each: members } } },
+         { new: true }
+      );
+
+      res.status(201).json({ message: "Members added successfully" });
+   } catch (err) {
+      console.log(`${err}`);
+      res.status(500).json({ msg: "Internal Server Error" });
+   }
+});
+
+router.delete('/removemembers', authenticate, async (req, res) => {
+   try {
+      const creator_id = req.userID;
+      const members = req.body.members;
+      const group_id = req.body.groupId;
+
+      const updateGroup = await Group.findByIdAndUpdate(
+         group_id,
+         { $pull: { members: { $in: members } } },
+         { new: true }
+      );
+
+      res.status(200).json({ message: "Members removed successfully" });
+   } catch (err) {
+      console.error(err);
+      res.status(500).json({ msg: "Internal Server Error" });
+   }
+});
+
+
+router.post('/sendgroupchat', authenticate, async (req, res) => {
+   try {
+      const fromUser = req.userID;
+      const message = req.body.message;
+      const groupid = req.body.groupId;
+      const currUser=await User.findById({
+         _id:fromUser
+      })
+      const name=currUser.name
+      const newChatGroup=new GroupChat({fromUser,message,groupid,name})
+      await newChatGroup.save()
+   
+      res.status(200).json({ message: "Message added successfully" });
+   } catch (err) {
+      console.error(err);
+      res.status(500).json({ msg: "Internal Server Error" });
+   }
+});
+
+router.get('/getMembersToAdded', authenticate, async (req, res) => {
+   const id = req.userID;
+   const groupid = req.body.groupId;
+
+   try {
+      const currUser = await User.findOne({ _id: id });
+      const currFriends = currUser.friends;
+      const group = await Group.findOne({ _id: groupid });
+      const addedMembers = group.members;
+      const allUsers = await User.find({ _id: { $in: currFriends, $nin: addedMembers } });
+
+      res.status(200).json({ msg: allUsers });
+   } catch (err) {
+      console.error(err);
+      res.status(500).json({ msg: "Internal Server Error" });
+   }
+});
+
+
+router.get('/getMembersToRemoved', authenticate, async (req, res) => {
+   const id = req.userID;
+   const groupid = req.body.groupId;
+
+   try {
+      const group = await Group.findOne({ _id: groupid });
+      const addedMembers = group.members;
+      const allUsers = await User.find({ _id: {  $in: addedMembers ,$nin: id} });
+
+      res.status(200).json({ msg: allUsers });
+   } catch (err) {
+      console.error(err);
+      res.status(500).json({ msg: "Internal Server Error" });
+   }
+});
+
+router.get('/getgroupchat', authenticate, async (req, res) => {
+   try {
+       const fromUser = req.userID;
+       const groupid = req.body.groupId; // Using query instead of body for groupId
+       const messages = await GroupChat.find({
+         groupid: groupid
+       }).sort({ createdAt: 1 }); 
+       
+       const projectedMessage = messages.map(msg => {
+         return {
+            fromUser: msg.fromUser.equals(fromUser),
+            message: msg.message,
+            name: msg.name
+         };
+       });
+       res.status(200).json({ msg: projectedMessage });
+   } catch (error) {
+       console.error(error);
+       res.status(500).json({ msg: 'Internal Server Error' });
+   }
+});
+
+
 
 module.exports=router

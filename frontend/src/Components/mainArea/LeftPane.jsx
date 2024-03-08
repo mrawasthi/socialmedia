@@ -1,16 +1,16 @@
 import React from 'react'
 import './LeftPane.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useAuth } from '../../store/auth';
 import { useNavigate } from 'react-router-dom';
 
 const leftPane = (props) => {
     const navigate = useNavigate();
-    const {LogoutUser,user} =useAuth()
-    const logout=()=>{
+    const { LogoutUser, user } = useAuth()
+    const logout = () => {
         LogoutUser()
-        
+
         navigate("/Login")
     }
 
@@ -27,7 +27,7 @@ const leftPane = (props) => {
                 <button type="button" class="btn btn-outline-dark border-0 btn-lg text-left">
                     <Link to='/friends' style={{ textDecoration: 'none', color: 'inherit' }}>Friends</Link>
                 </button>
-                <button type="button" class="btn btn-outline-dark border-0 btn-lg text-left" onClick={()=>props.setpopupshow(prev => !prev)}>
+                <button type="button" class="btn btn-outline-dark border-0 btn-lg text-left" onClick={() => props.setpopupshow(prev => !prev)}>
                     Post
                 </button>
                 <button type="button" class="btn btn-outline-dark border-0 btn-lg text-left">
