@@ -96,25 +96,25 @@ const io = socket(server, {
     },
   });
   
- // Initialize onlineUsers map
+ 
 global.onlineUsers = new Map();
-global.onlineUser=new Map();
+global.onlineGroupUsers = new Map(); 
 io.on("connection", (socket) => {
     console.log("A user connected");
 
     // Add user to onlineUsers map
     socket.on("add-user", (userId) => {
-        //console.log("User added:", userId);
+        console.log("bbb")
         onlineUsers.set(userId, socket.id);
-        //console.log("Online Users:", onlineUsers);
+        console.log(userId)
+        console.log(socket.id)
     });
     socket.on("add-grp-user", (userId) => {
         console.log("User added:", userId);
-        onlineUser.set(userId, socket.id);
-        console.log("Online Users:", onlineUser);
+        console.log("bbbb")
+        onlineGroupUsers.set(userId, socket.id);
+        console.log("Online Users:", onlineGroupUsers);
     });
-
-    // Send message to a specific user
     socket.on("send-msg", (data) => {
         console.log("Message data:", data);
         const sendUserSocket = onlineUsers.get(data.to);
@@ -124,8 +124,6 @@ io.on("connection", (socket) => {
             console.log("User not found");
         }
     });
-
-    // Send message to group members
     socket.on("send-grp-msg", async (data) => {
         console.log("Group message data:", data);
         const groupId = data.to;
@@ -133,8 +131,15 @@ io.on("connection", (socket) => {
         const member = group.members;
         console.log("Group members:", member);
         for(let i=0;i<member.length;i++){
-            const sendUserSocket=onlineUser.get(member[i]);
-            socket.broadcast.to(sendUserSocket).emit("msg-grp-receive", data);
+            const memberId = member[i].toString();
+            const sendUser=onlineGroupUsers.get(memberId);
+            if(sendUser && data.from!==memberId){
+                console.log("bbbbbbbbbbbb")
+            socket.broadcast.to(sendUser).emit("msg-grp-receive", data);
+            }
+            else{
+                console.log("not found")
+            }
         }
         
     });

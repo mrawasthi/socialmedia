@@ -32,6 +32,8 @@ export const AuthProvider= ({children})=>{
             console.log(data.msg)
             let obj=data.msg
             console.log(obj)
+            
+            socket.emit("add-grp-user",obj._id)
             setUser(obj)
             console.log(user)
            }               

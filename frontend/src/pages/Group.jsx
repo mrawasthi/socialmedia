@@ -5,7 +5,6 @@ import search1 from "../image/search1.png";
 import { useAuth } from '../store/Auth';
 import Welcome from '../Components/ChatArea/Welcome.jsx'
 import GroupChatContainer from '../Components/ChatArea/GroupChatContainer.jsx'
-import {io} from "socket.io-client"
 import { BsEmojiSmileFill } from "react-icons/bs";
 import { IoMdSend } from "react-icons/io";
 import Modal from "../Components/mainArea/GroupCreate.jsx"
@@ -45,16 +44,19 @@ import Modal2 from "../Components/mainArea/GroupUpdate.jsx"
   useEffect(()=>{
    
     console.log(socket)
-    socket.emit("add-grp-user",id)
+    socket.emit("add-grp-user",user.id)
       
       socket.on("msg-grp-receive",(msg)=>{
-        if(msg.to===currChat){
+        console.log(msg.to)
+        console.log("herreeeiam boiiss")
+        console.log(currChat+";lakjflakshfldsnfkasn")
+        
         console.log(msg)
         setArrivalmsg({fromUser:false,message:msg.message,name:msg.name})
-        }
+        
       })
     
-    console.log("here i am boii")
+    console.log("here i am boii55")
   },[])
   useEffect(()=>{
     arrivalmsg && setCurrFriendChat((prevChat) => [...prevChat, arrivalmsg])

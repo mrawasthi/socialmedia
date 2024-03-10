@@ -556,6 +556,29 @@ router.get('/getgroups', authenticate, async (req, res) => {
        res.status(500).json({ msg: 'Internal Server Error' });
    }
 });
+const messagefromUser = {};
+
+router.post('/setdisappearing', authenticate, async (req, res) => {
+   try {
+       const fromUser = req.userID;
+       const friendId = req.body.ide;
+       const message = req.body.message;
+       if (!messagefromUser[friendId]) {
+         messagefromUser[friendId] = [];
+       }
+       messagefromUser[friendId].push({ from: fromUser, message: message });
+      setTimeout(() => {
+           if (messageStorage[friendId]) {
+               messageStorage[friendId] = messageStorage[friendId].filter(msgObj => msgObj.message !== message);
+           }
+       }, 5000);
+
+       res.status(200).json({ msg: 'Message set to disappear after 5 seconds' });
+   } catch (error) {
+       console.error(error);
+       res.status(500).json({ msg: 'Internal Server Error' });
+   }
+});
 
 
 
