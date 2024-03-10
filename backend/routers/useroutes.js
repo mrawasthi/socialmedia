@@ -256,7 +256,7 @@ router.post('/sendmessage',authenticate,async(req,res)=>{
    try{
       const friend=req.body.ide
       const message=req.body.content
-      //console.log({id,friend,message})
+     
       const msg = new Message({ message, fromUser: req.userID, toUser: friend });
       await msg.save()
       res.status(200).json({msg:"all ok"})
@@ -387,13 +387,19 @@ router.post('/creategroup', authenticate, async (req, res) => {
    try {
       const creator_id = req.userID;
       const  name= req.body.name;
+      const members = req.body.arr;
       const newGroup=new Group({creator_id,name})
       await newGroup.save()
-      const updateGroup = await Group.findByIdAndUpdate(
+      const updateGroup1 = await Group.findByIdAndUpdate(
          newGroup._id,
          { $push: { members:creator_id} },
          { new: true } 
       )
+      const updateGroup = await Group.findByIdAndUpdate(
+         newGroup._id,
+         { $push: { members: { $each: members } } },
+         { new: true }
+      );
       res.status(201).json({message:"Group created successfully and admin added"})
    } catch (err) {
       console.log(`${err}`);
@@ -401,7 +407,7 @@ router.post('/creategroup', authenticate, async (req, res) => {
    }
 });
 
-router.put('/addmembers', authenticate, async (req, res) => {
+router.post('/addmembers', authenticate, async (req, res) => {
    try {
       const creator_id = req.userID;
       const members = req.body.members;
@@ -420,7 +426,7 @@ router.put('/addmembers', authenticate, async (req, res) => {
    }
 });
 
-router.delete('/removemembers', authenticate, async (req, res) => {
+router.post('/removemembers', authenticate, async (req, res) => {
    try {
       const creator_id = req.userID;
       const members = req.body.members;
@@ -459,16 +465,41 @@ router.post('/sendgroupchat', authenticate, async (req, res) => {
    }
 });
 
-router.get('/getMembersToAdded', authenticate, async (req, res) => {
+router.post('/getMembersToAdded', authenticate, async (req, res) => {
    const id = req.userID;
-   const groupid = req.body.groupId;
+   const  groupId  = req.body.groupId; 
 
    try {
       const currUser = await User.findOne({ _id: id });
       const currFriends = currUser.friends;
-      const group = await Group.findOne({ _id: groupid });
+      const group = await Group.findOne({ _id: groupId });
       const addedMembers = group.members;
       const allUsers = await User.find({ _id: { $in: currFriends, $nin: addedMembers } });
+      res.status(200).json({ msg: allUsers });
+   } catch (err) {
+      console.error(err);
+      res.status(500).json({ msg: "Internal Server Error" });
+   }
+});
+
+router.get('/getMembersToAdded1', authenticate, async (req, res) => {
+   const id = req.userID;
+
+   try {
+      const currUser = await User.findOne({ _id: id });
+      if (!currUser) {
+         return res.status(404).json({ msg: "User not found" });
+      }
+
+      const currFriends = currUser.friends;
+      if (!currFriends || currFriends.length === 0) {
+         return res.status(404).json({ msg: "No friends found for the current user" });
+      }
+
+      const allUsers = await User.find({ _id: { $in: currFriends } });
+      if (!allUsers || allUsers.length === 0) {
+         return res.status(404).json({ msg: "No friends found" });
+      }
 
       res.status(200).json({ msg: allUsers });
    } catch (err) {
@@ -477,8 +508,7 @@ router.get('/getMembersToAdded', authenticate, async (req, res) => {
    }
 });
 
-
-router.get('/getMembersToRemoved', authenticate, async (req, res) => {
+router.post('/getMembersToRemoved', authenticate, async (req, res) => {
    const id = req.userID;
    const groupid = req.body.groupId;
 
@@ -494,7 +524,7 @@ router.get('/getMembersToRemoved', authenticate, async (req, res) => {
    }
 });
 
-router.get('/getgroupchat', authenticate, async (req, res) => {
+router.post('/getgroupchat', authenticate, async (req, res) => {
    try {
        const fromUser = req.userID;
        const groupid = req.body.groupId; // Using query instead of body for groupId
@@ -510,6 +540,17 @@ router.get('/getgroupchat', authenticate, async (req, res) => {
          };
        });
        res.status(200).json({ msg: projectedMessage });
+   } catch (error) {
+       console.error(error);
+       res.status(500).json({ msg: 'Internal Server Error' });
+   }
+});
+
+router.get('/getgroups', authenticate, async (req, res) => {
+   try {
+       const fromUser = req.userID;
+       const projectedGroups = await Group.find({ members: { $in: fromUser } });
+       res.status(200).json({ msg: projectedGroups });
    } catch (error) {
        console.error(error);
        res.status(500).json({ msg: 'Internal Server Error' });

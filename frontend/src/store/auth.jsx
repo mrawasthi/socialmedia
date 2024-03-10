@@ -1,9 +1,11 @@
 import {createContext, useContext,useState,useEffect} from "react"
-
+import {io} from "socket.io-client"
 export const AuthContext=createContext();
+
 
 export const AuthProvider= ({children})=>{
     const [token,setToken]=useState(localStorage.getItem("token"))
+    const  socket=new io("http://localhost:3000")
     
     const [user,setUser]=useState({})
     let checking=!!token
@@ -43,7 +45,7 @@ export const AuthProvider= ({children})=>{
     },[])
    return(
 
-   <AuthContext.Provider value={{token,user,checking,storeTokenInLS,LogoutUser,setUser,setToken}}>
+   <AuthContext.Provider value={{token,user,checking,storeTokenInLS,LogoutUser,setUser,setToken,socket}}>
        {children}
    </AuthContext.Provider>
    ) 

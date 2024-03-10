@@ -7,6 +7,7 @@ import Profile from "../pages/Profile";
 import Friends from "../pages/Friends";
 import Contactus from "../pages/Contactus";
 import Chat from "../pages/Chat"
+import Group from "../pages/Group"
 
 export const router = createBrowserRouter([
   {
@@ -40,5 +41,9 @@ export const router = createBrowserRouter([
   {
     path: "/chat",
     element: <Chat />
+  },
+  {
+    path: "/group",
+    element: <Group />
   }
 ]);

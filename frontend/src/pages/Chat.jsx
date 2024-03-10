@@ -26,8 +26,8 @@ import { IoMdSend } from "react-icons/io";
   }
   };
   
-  const  socket=new io("http://localhost:3000")
-  const { token,setUser,user } = useAuth()
+  
+  const { token,setUser,user,socket } = useAuth()
   console.log(user)
   console.log(token)
   const id = user._id
@@ -35,8 +35,9 @@ import { IoMdSend } from "react-icons/io";
   useEffect(()=>{
    
     console.log(socket)
-    socket.emit("add-user",id)
+    //socket.emit("add-user",id)
     if(socket){
+      socket.emit("add-user", user._id)
       socket.on("msg-receive",(msg)=>{
         console.log(msg)
         setArrivalmsg({fromUser:false,message:msg.message})
