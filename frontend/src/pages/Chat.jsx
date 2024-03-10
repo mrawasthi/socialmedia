@@ -132,8 +132,6 @@ import { IoMdSend } from "react-icons/io";
       console.log(`${error}`)
     }
   }
-  
-
   React.useEffect(() => {
     firstRender()
   }, [])
