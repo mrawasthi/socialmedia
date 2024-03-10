@@ -12,6 +12,7 @@ const authenticate=require("./middlewares/authenticate.js")
 //import userSchema
 const User=require("./model/userSchema")
 const Post=require("./model/postModel")
+const Group=require("./model/group")
 app.use(express.json())
 app.use(cors())
 const cookieParser = require("cookie-parser");
@@ -95,24 +96,48 @@ const io = socket(server, {
     },
   });
   
-  global.onlineUsers = new Map();
-  io.on("connection", (socket) => {
-    global.chatSocket = socket;
-    console.log("ok")
+ // Initialize onlineUsers map
+global.onlineUsers = new Map();
+global.onlineUser=new Map();
+io.on("connection", (socket) => {
+    console.log("A user connected");
+
+    // Add user to onlineUsers map
     socket.on("add-user", (userId) => {
-        console.log("hello guys")
+        //console.log("User added:", userId);
         onlineUsers.set(userId, socket.id);
-        console.log(onlineUsers)
+        //console.log("Online Users:", onlineUsers);
+    });
+    socket.on("add-grp-user", (userId) => {
+        console.log("User added:", userId);
+        onlineUser.set(userId, socket.id);
+        console.log("Online Users:", onlineUser);
     });
 
+    // Send message to a specific user
     socket.on("send-msg", (data) => {
-        console.log(data, 'bbbbb'); 
+        console.log("Message data:", data);
         const sendUserSocket = onlineUsers.get(data.to);
+        if (sendUserSocket) {
+            socket.to(sendUserSocket).emit("msg-receive", data);
+        } else {
+            console.log("User not found");
+        }
+    });
+
+    // Send message to group members
+    socket.on("send-grp-msg", async (data) => {
+        console.log("Group message data:", data);
+        const groupId = data.to;
+        const group = await Group.findById(groupId);
+        const member = group.members;
+        console.log("Group members:", member);
+        for(let i=0;i<member.length;i++){
+            const sendUserSocket=onlineUser.get(member[i]);
+            socket.broadcast.to(sendUserSocket).emit("msg-grp-receive", data);
+        }
         
-        // Use socket.broadcast.emit to send the message to all clients except the sender
-        
-            //console.log(data, 'bb');
-            socket.broadcast.to(sendUserSocket).emit("msg-receive", data);
-        
-    })
-})
+    });
+});
+
+

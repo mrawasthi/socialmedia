@@ -61,7 +61,7 @@ import Modal2 from "../Components/mainArea/GroupUpdate.jsx"
    },[arrivalmsg])
   const firstRender = async () => {
     try {
-      const response = await fetch("http://localhost:3000/getgroups", {
+      const response = await fetch(`http://localhost:3000/getgroups`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`
@@ -76,13 +76,13 @@ import Modal2 from "../Components/mainArea/GroupUpdate.jsx"
         socket.emit("add-grp-user", user._id)
       }
     } catch (error) {
-      console.log(${error})
+      console.log(`${error}`)
     }
   }
   const addition=async(ide)=>{
     let groupId=ide
     try {
-      const res = await fetch("http://localhost:3000/getMembersToAdded", {
+      const res = await fetch(`http://localhost:3000/getMembersToAdded`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -108,13 +108,13 @@ import Modal2 from "../Components/mainArea/GroupUpdate.jsx"
         }
       }
     } catch (error) {
-      console.log(${error})
+      console.log(`${error}`)
     }
   }
   const subtraction=async(ide)=>{
     let groupId=ide
     try {
-      const res = await fetch("http://localhost:3000/getMembersToRemoved", {
+      const res = await fetch(`http://localhost:3000/getMembersToRemoved`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -140,14 +140,14 @@ import Modal2 from "../Components/mainArea/GroupUpdate.jsx"
         }
       }
     } catch (error) {
-      console.log(${error})
+      console.log(`${error}`)
     }
   }
   const chatFriend=async(ide)=>{
     setCurrChat(ide)
     let groupId=ide
     try {
-      const response = await fetch("http://localhost:3000/getgroupchat", {
+      const response = await fetch(`http://localhost:3000/getgroupchat`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -164,12 +164,12 @@ import Modal2 from "../Components/mainArea/GroupUpdate.jsx"
         setCurrFriendChat(obj)
       }
     } catch (error) {
-      console.log(${error})
+      console.log(`${error}`)
     }
   }
   const addgroup = async () => {
     try {
-      const res = await fetch("http://localhost:3000/getMembersToAdded1", {
+      const res = await fetch(`http://localhost:3000/getMembersToAdded1`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`
@@ -211,7 +211,7 @@ const sendGroupChat = (event) => {
     e.preventDefault()
 
     try {
-      const response = await fetch("http://localhost:3000/sendgroupchat", {
+      const response = await fetch(`http://localhost:3000/sendgroupchat`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -236,7 +236,7 @@ const sendGroupChat = (event) => {
 
       }
     } catch (error) {
-      console.log(${error})
+      console.log(`${error}`)
     }
   }
   function addmem(ide){

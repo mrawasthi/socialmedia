@@ -27,6 +27,9 @@ const leftPane = (props) => {
                 <button type="button" class="btn btn-outline-dark border-0 btn-lg text-left">
                     <Link to='/friends' style={{ textDecoration: 'none', color: 'inherit' }}>Friends</Link>
                 </button>
+                <button type="button" class="btn btn-outline-dark border-0 btn-lg text-left">
+                    <Link to='/group' style={{ textDecoration: 'none', color: 'inherit' }}>Group</Link>
+                </button>
                 <button type="button" class="btn btn-outline-dark border-0 btn-lg text-left" onClick={() => props.setpopupshow(prev => !prev)}>
                     Post
                 </button>
