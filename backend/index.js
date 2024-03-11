@@ -124,6 +124,15 @@ io.on("connection", (socket) => {
             console.log("User not found");
         }
     });
+    socket.on("send-video-call", (data) => {
+        console.log("Message data:", data);
+        const sendUserSocket = onlineUsers.get(data.to);
+        if (sendUserSocket) {
+            socket.to(sendUserSocket).emit("video-call-receive", data);
+        } else {
+            console.log("User not found");
+        }
+    });
     socket.on("send-grp-msg", async (data) => {
         console.log("Group message data:", data);
         const groupId = data.to;

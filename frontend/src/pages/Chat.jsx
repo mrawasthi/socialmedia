@@ -1,13 +1,14 @@
 // friends.jsx
 import React, { useState ,useRef,useEffect} from 'react';
 import '../Scss/Chat.scss';
-import search1 from "../image/search1.png";
+import room from "../image/icons8-video-call-50 (1).png";
 import { useAuth } from '../store/Auth';
 import {io} from "socket.io-client"
 import Welcome from '../Components/ChatArea/Welcome.jsx'
 import ChatContainer from '../Components/ChatArea/ChatContainer.jsx'
 import { BsEmojiSmileFill } from "react-icons/bs";
 import { IoMdSend } from "react-icons/io";
+import RoomPop from "../Components/mainArea/RoomPopUp.jsx"
 
   const Friends = () => {
   const [currFriend, setCurrFriend] = useState([])
@@ -16,6 +17,7 @@ import { IoMdSend } from "react-icons/io";
   //const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [currFriendChat,setCurrFriendChat]=useState([])
   const [arrivalmsg,setArrivalmsg]=useState([])
+  const [RoomPopUp, setRoomPopUp]=useState(false)
   const scrollRef = useRef();
 
   const sendChat = (event) => {
@@ -41,6 +43,10 @@ import { IoMdSend } from "react-icons/io";
       socket.on("msg-receive",(msg)=>{
         console.log(msg)
         setArrivalmsg({fromUser:false,message:msg.message})
+      })
+      socket.on("video-call-receive",(msg)=>{
+        console.log(msg)
+        window.location=`videocall?room=${msg.message}`
       })
     }
     console.log("here i am boii")
@@ -132,12 +138,17 @@ import { IoMdSend } from "react-icons/io";
       console.log(`${error}`)
     }
   }
+  function handleRoom(){
+    setRoomPopUp(true);
+  }
+
   React.useEffect(() => {
     firstRender()
   }, [])
 
   return (
     <div className="upper-container">
+      {RoomPopUp && <RoomPop setRoomPopUp={setRoomPopUp} socket={socket} currChat={currChat}/>}
       <div className="upper-container-friend">
         <div className="left-friend">
           <div className="form-group">
@@ -152,7 +163,13 @@ import { IoMdSend } from "react-icons/io";
                       <div className="search-item">{friend.name}</div>
                       <div className="search-item">{friend.email}</div>
                     </div>
-                    
+                    <button
+                      type="button"
+                      className="btn btn-dark search-button"
+                      onClick={handleRoom}
+                    >
+                      <img src={room} alt="Search" className="medal" />
+                    </button>
                   </div>
                 ))}
               </div>

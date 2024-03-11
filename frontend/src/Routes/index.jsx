@@ -8,6 +8,7 @@ import Friends from "../pages/Friends";
 import Contactus from "../pages/Contactus";
 import Chat from "../pages/Chat"
 import Group from "../pages/Group"
+import VideoCall from "../pages/VideoCall"
 
 export const router = createBrowserRouter([
   {
@@ -45,5 +46,9 @@ export const router = createBrowserRouter([
   {
     path: "/group",
     element: <Group />
+  },
+  {
+    path: "/videocall",
+    element: <VideoCall />
   }
 ]);
